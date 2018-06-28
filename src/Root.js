@@ -12,12 +12,12 @@ import RegisterView from './components/Page/RegisterView';
 import ForgetPsdView from './components/Page/ForgetPsd';
 import VerifyView from './components/Page/VerifyView';
 import SetPsdView from './components/Page/SetPsdView';
-
+import GoodPageView from './components/Page/GoodPageView'
 import HomeView from './components/Home/HomeView';
 
 import CartView from './components/Cart/CartView';
 import MineView from './components/Mine/MineView';
-import CategoryView from './components/Category/CategoryView';
+import LikeView from './components/Like/like';
 
 import TabBarItem from './components/TabBarItem'
 
@@ -36,16 +36,16 @@ const Tab = TabNavigator({
                 )
             }
         },
-        Category: {
-            screen: CategoryView,
+        Like: {
+            screen: LikeView,
             navigationOptions: {
-                tabBarLabel: '分类',
+                tabBarLabel: '收藏',
                 tabBarIcon: ({focused, tintColor}) => (
                     <TabBarItem
                         tintColor={tintColor}
                         focused={focused}
-                        selectedImage={require('./images/categorySelect.png')}
-                        normalImage={require('./images/category.png')}
+                        selectedImage={require('./images/likeSelect.png')}
+                        normalImage={require('./images/like.png')}
                     />
                 )
             }
@@ -87,7 +87,7 @@ const Tab = TabNavigator({
         animationEnabled: true,
         lazy: true,
         tabBarOptions: {
-            activeTintColor: '#0371df',
+            activeTintColor: '#e5779c',
             inactiveTintColor: '#71777c',
             labelStyle: {
                 fontSize: 12, // 文字大小
@@ -107,6 +107,10 @@ export default StackNavigator(
             navigationOptions: {
                 header: null
             }
+        },
+
+        GoodPage:{
+            screen: GoodPageView,
         },
         Register: {
             screen: RegisterView,

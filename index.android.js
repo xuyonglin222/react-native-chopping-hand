@@ -1,5 +1,5 @@
 import { AppRegistry } from 'react-native';
-import App from './Root';
+import App from './src/Root';
 
 
 

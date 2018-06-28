@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
-import {View, Text, StatusBar, Image, Button, StyleSheet, ScrollView, TouchableOpacity} from 'react-native'
+import {View, Text, StatusBar, Image, Button, StyleSheet,
+    ScrollView, TouchableOpacity} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {width, height} from '../../api/screen'
 import {fruitlist} from "../../api/goodList";
@@ -58,8 +59,8 @@ class HomeView extends Component {
                 <View style={{width: width, height: 150,}}>
                     {this.state.swipeShow && this.renderSwiper()}
                 </View>
-                <View                    style={styles.tabContainer}
-
+                <View
+                    style={styles.tabContainer}
                 >
                     <ScrollableTabView
                         tabBarBackgroundColor={'white'}
