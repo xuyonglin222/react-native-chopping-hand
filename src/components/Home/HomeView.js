@@ -2,7 +2,9 @@ import React, {Component} from 'react'
 import {View, Text, StatusBar, Image, Button, StyleSheet, ScrollView, TouchableOpacity} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {width, height} from '../../api/screen'
-
+import {fruitlist} from "../../api/goodList";
+import GoodItem from './goodItem'
+import ScrollableTabView, {DefaultTabBar} from 'react-native-scrollable-tab-view'
 
 class HomeView extends Component {
     static navigationOptions = {
@@ -19,15 +21,8 @@ class HomeView extends Component {
         super(props);
         this.state = {
             swipeShow: false,
-            fruitArr : [
-                '../../images/a1.png',
-                '../../images/a2.png',
-                '../../images/a3.png',
-                '../../images/a4.png',
-                '../../images/a5.png',
-                '../../images/a6.png',
-            ]
-        }
+        };
+        this.txt = null
     }
 
     componentDidMount() {
@@ -54,6 +49,7 @@ class HomeView extends Component {
         )
     }
 
+
     render() {
         let {navigate} = this.props.navigation;
         return (
@@ -62,13 +58,36 @@ class HomeView extends Component {
                 <View style={{width: width, height: 150,}}>
                     {this.state.swipeShow && this.renderSwiper()}
                 </View>
-                    {this.state.fruitArr.map((img,index)=> {
-                            console.log(img, index);
-                            return (<View key={index}  style={{width:40,height:40}}>
-                                <Image  source={{uri:img}} style={{width: 40, height: 40,}}/>
-                            </View>)
-                        }
-                    )}
+                <View                    style={styles.tabContainer}
+
+                >
+                    <ScrollableTabView
+                        tabBarBackgroundColor={'white'}
+                        tabBarActiveTextColor={'#e5779c'}
+                        tabBarUnderlineStyle={{backgroundColor: '#e5779c'}}
+                        renderTabBar={() => <DefaultTabBar/>}>
+                        <View style={styles.goodBox} tabLabel={'fruit'}>
+                            {fruitlist.map((fruit, index) => {
+                                    return <GoodItem key={index} obj={fruit} navigation={this.props.navigation}
+                                    />
+                                }
+                            )}
+                        </View>
+                        <View style={styles.goodBox} tabLabel={'clothes'}>
+                            {fruitlist.map((fruit, index) => {
+                                    return <GoodItem key={index}
+                                                     obj={fruit} navigation={this.props.navigation}/>
+                                }
+                            )}
+                        </View>
+                        <View style={styles.goodBox} tabLabel={'phone'}>
+                            {fruitlist.map((fruit, index) => {
+                                    return <GoodItem key={index} obj={fruit} navigation={this.props.navigation}/>
+                                }
+                            )}
+                        </View>
+                    </ScrollableTabView>
+                </View>
                 <Text onPress={() => navigate('Login')}>{width}{height}</Text>
             </ScrollView>
         )
@@ -81,18 +100,33 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white'
     },
-    swiper: {
-    },
+    swiper: {},
     slideShow: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        width:width,
-        height:150
+        width: width,
+        height: 150
     },
     banner: {
         width: 360,
-        height:150
+        height: 150
+    },
+    txt: {
+        width: 120,
+        height: 45,
+    },
+    tabContainer:{
+        width: width,
+        height: 600,
+        backgroundColor:'white'
+    },
+    goodBox: {
+        width: width,
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around'
     }
 })
 export default HomeView;

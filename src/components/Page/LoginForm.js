@@ -31,11 +31,8 @@ class LoginForm extends  Component{
             <View style={styles.absolute}>
                 <View style={styles.header}>
                     <Image
-                      small
-                      rounded
                       source={{uri: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"}}
                       onPress={() => console.log("Works!")}
-                      activeOpacity={0.7}
                     />
                     <Text style={styles.register} onPress={()=>navigate('Register')}>新用户去注册</Text>
                 </View>
@@ -72,7 +69,7 @@ class LoginForm extends  Component{
                             <Button
                                 ref={'btnLogin'}
                                 title='登录'
-                                disabled={this.state.isBtnActive}
+                                // disabled={this.state.isBtnActive}
                                 onPress ={()=>navigate('Home')}
                             />
                         </TouchableOpacity>
