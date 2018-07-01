@@ -24,8 +24,8 @@ export default class GoodPageView extends Component {
         super(props);
         this.state = {
             Msg: null,
-            postArr:['中通','顺丰','韵达'],
-            pic:require('../../images/like.png'),
+            postArr: ['中通', '顺丰', '韵达'],
+            pic: require('../../images/like.png'),
 
         }
     }
@@ -42,11 +42,13 @@ export default class GoodPageView extends Component {
         //拿到mount
         console.log(mount)
     }
-    likeChange(){
+
+    likeChange() {
         this.setState({
-            pic:require('../../images/likeSelect.png')
+            pic: require('../../images/likeSelect.png')
         })
     }
+
     render() {
         let postArr = this.state.postArr;
         return <View>
@@ -78,9 +80,9 @@ export default class GoodPageView extends Component {
                             <Text style={styles.label}>快递</Text>
                             <View style={styles.btnGroup}>
                                 {
-                                    postArr.map((item,index)=>{
+                                    postArr.map((item, index) => {
                                         return <TouchableOpacity>
-                                            <Text key={index}  style={styles.btn}>{item}</Text>
+                                            <Text key={index} style={styles.btn}>{item}</Text>
                                         </TouchableOpacity>
                                     })
                                 }
@@ -96,9 +98,16 @@ export default class GoodPageView extends Component {
                     </TouchableOpacity>
 
                 </View>
-                <TouchableOpacity style={styles.addToCart} >
-                    <Text style={{lineHeight:27,fontSize:18,textAlign:'center',color:'white'
+
+                <TouchableOpacity style={styles.addToCart}>
+                    <Text style={{
+                        lineHeight: 27, fontSize: 18, textAlign: 'center', color: 'white'
                     }}>Add To Cart</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.Buy}>
+                    <Text style={{
+                        lineHeight: 27, fontSize: 18, textAlign: 'center', color: 'white'
+                    }}>Buy Now</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -161,6 +170,7 @@ const styles = StyleSheet.create({
         top: 120,
         right: 20,
         borderRadius: 20,
+
     },
     likeIcon: {
         width: 15,
@@ -189,70 +199,79 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 20
     },
-    label:{
-        height:30,
+    label: {
+        height: 30,
     },
     price: {
         width: 120,
         flexDirection: 'row',
-        backgroundColor: 'gray',
+        backgroundColor: '#297bb8',
         height: 40,
         marginTop: -10,
         paddingLeft: 10,
-        borderBottomLeftRadius:10,
-        borderTopLeftRadius:10
+        borderBottomLeftRadius: 10,
+        borderTopLeftRadius: 10
     },
     fontStyle1: {
         color: 'white',
         lineHeight: 30,
         marginRight: 5,
         marginLeft: 5,
-        fontSize:15
+        fontSize: 15
     },
     fontStyle2: {
         color: 'white',
         lineHeight: 30,
         marginLeft: 5,
-        marginRight:2,
-        fontSize:18
+        marginRight: 2,
+        fontSize: 18
     },
     fontStyle3: {
         color: 'white',
         lineHeight: 30,
-        fontSize:10,
+        fontSize: 10,
         marginRight: 5,
     },
-    post:{
+    post: {
         width: width - 80,
         height: 40,
         paddingLeft: 20,
         flex: 1,
         flexDirection: 'row',
     },
-    btnGroup:{
-        width:100,
-        flexDirection:'row',
-        marginLeft:20,
-        marginTop:-10
+    btnGroup: {
+        width: 100,
+        flexDirection: 'row',
+        marginLeft: 20,
+        marginTop: -10
     },
-    btn:{
-        width:40,
-        height:40,
-        borderWidth:1,
-        borderColor:'#e5779c',
-        lineHeight:30,
-        textAlign:'center',
-        borderRadius:30,
-        color:'#e5779c',
-        marginRight:10
+    btn: {
+        width: 40,
+        height: 40,
+        borderWidth: 1,
+        borderColor: '#e5779c',
+        lineHeight: 30,
+        textAlign: 'center',
+        borderRadius: 30,
+        color: '#e5779c',
+        marginRight: 10
     },
-    addToCart:{
-        position:'absolute',
-        backgroundColor:'#f83e53',
-        width:150,
-        height:35,
-        borderRadius:15,
-        bottom:95,
-        left:95
+    addToCart: {
+        position: 'absolute',
+        backgroundColor: '#297bb8',
+        width: 150,
+        height: 35,
+        borderRadius: 15,
+        bottom: 95,
+        left: 25
+    },
+    Buy: {
+        position: 'absolute',
+        backgroundColor: '#f83e53',
+        width: 150,
+        height: 35,
+        borderRadius: 15,
+        bottom: 95,
+        right:25
     }
 })

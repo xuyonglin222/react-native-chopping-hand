@@ -7,14 +7,14 @@
 import React, {Component} from 'react';
 import {StackNavigator, TabNavigator, TabBarBottom} from 'react-navigation'
 
-import LoginView from './components/Page/LoginView';
+import LoginView from './components/Login/LoginView';
 import RegisterView from './components/Page/RegisterView';
 import ForgetPsdView from './components/Page/ForgetPsd';
 import VerifyView from './components/Page/VerifyView';
 import SetPsdView from './components/Page/SetPsdView';
-import GoodPageView from './components/Page/GoodPageView'
+import GoodPageView from './components/Good/GoodPageView'
 import HomeView from './components/Home/HomeView';
-
+import OrderView  from './components/Order/Order';
 import CartView from './components/Cart/CartView';
 import MineView from './components/Mine/MineView';
 import LikeView from './components/Like/like';
@@ -36,20 +36,6 @@ const Tab = TabNavigator({
                 )
             }
         },
-        Like: {
-            screen: LikeView,
-            navigationOptions: {
-                tabBarLabel: '收藏',
-                tabBarIcon: ({focused, tintColor}) => (
-                    <TabBarItem
-                        tintColor={tintColor}
-                        focused={focused}
-                        selectedImage={require('./images/likeSelect.png')}
-                        normalImage={require('./images/like.png')}
-                    />
-                )
-            }
-        },
         Cart: {
             screen: CartView,
             navigationOptions: {
@@ -67,7 +53,7 @@ const Tab = TabNavigator({
         Mine: {
             screen: MineView,
             navigationOptions: {
-                tabBarLabel: '我的',
+                tabBarLabel: '我',
                 tabBarIcon: ({focused, tintColor}) => (
                     <TabBarItem
                         tintColor={tintColor}
@@ -108,7 +94,12 @@ export default StackNavigator(
                 header: null
             }
         },
-
+        Like: {
+            screen: LikeView,
+        },
+        Order:{
+            screen:OrderView
+        },
         GoodPage:{
             screen: GoodPageView,
         },

@@ -36,7 +36,7 @@ class HomeView extends Component {
 
     renderSwiper() {
         return (
-            <Swiper style={styles.swiper} showsButtons>
+            <Swiper style={styles.swiper} autoplay={true} showsButtons>
                 <View style={styles.slideShow}>
                     <Image style={styles.banner} source={require('../../images/slide1.jpg')}/>
                 </View>
@@ -59,10 +59,8 @@ class HomeView extends Component {
                 <View style={{width: width, height: 150,}}>
                     {this.state.swipeShow && this.renderSwiper()}
                 </View>
-                <View
-                    style={styles.tabContainer}
-                >
                     <ScrollableTabView
+                        style={styles.tabContainer}
                         tabBarBackgroundColor={'white'}
                         tabBarActiveTextColor={'#e5779c'}
                         tabBarUnderlineStyle={{backgroundColor: '#e5779c'}}
@@ -88,8 +86,6 @@ class HomeView extends Component {
                             )}
                         </View>
                     </ScrollableTabView>
-                </View>
-                <Text onPress={() => navigate('Login')}>{width}{height}</Text>
             </ScrollView>
         )
     }

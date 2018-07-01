@@ -5,12 +5,10 @@ import {fruitlist} from "../../api/goodList";
 import LikeItem from './LikeItem'
 class LikeView extends Component{
     static navigationOptions = {
-        title: '分类',
-        headerTitleStyle: {flex:1,textAlign:'center',fontSize: 15, color: 'black',},
-        headerStyle: {height: 38, backgroundColor: 'white',marginTop:21},
-        headerLeft:<Image style={{width:0,height:0}} />,
-        headerBackStyle:null,
-        headerRight:<Image style={{width:25,height:25,marginRight:15}} source={require('../../images/search.png')}/>
+        title: '收藏',
+        headerTitleStyle: {flex: 1, textAlign: 'center', fontSize: 15, color: 'black'},
+        headerStyle: {height: 38, backgroundColor: 'white', marginTop: 21},
+        headerRight: <Image style={{width: 40, height: 40}}/>
     };
     constructor(props){
         super(props);
