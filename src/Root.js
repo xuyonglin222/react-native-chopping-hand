@@ -21,6 +21,9 @@ import LikeView from './components/Like/like';
 
 import TabBarItem from './components/TabBarItem'
 
+import {Provider} from  'mobx-react'
+import  {goodList,cartGoods} from './store'
+let store = {goodList,cartGoods};
 const Tab = TabNavigator({
         Home: {
             screen: HomeView,
@@ -81,9 +84,9 @@ const Tab = TabNavigator({
         }
 
     }
-)
+);
 
-export default StackNavigator(
+const Stack =StackNavigator(
     {
         Tab: {
             screen: Tab,
@@ -137,3 +140,11 @@ export default StackNavigator(
         mode: 'card'
     })
 
+
+ const  Navigation=()=>{
+    return <Provider rootStore={store}>
+        <Stack/>
+    </Provider>
+}
+
+export default Navigation

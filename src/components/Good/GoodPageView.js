@@ -6,12 +6,19 @@ import {
     Text,
     Image,
     StatusBar,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native'
 
 import {width, height} from '../../api/screen'
 import Mount from './Mount'
+import {observer,inject} from 'mobx-react'
 
+/*快递按钮颜色*/
+let btnColor='#e5779c';
+
+@observer
+@inject('rootStore')
 export default class GoodPageView extends Component {
     static navigationOptions = {
         title: '商品详情',
@@ -24,31 +31,111 @@ export default class GoodPageView extends Component {
         super(props);
         this.state = {
             Msg: null,
-            postArr: ['中通', '顺丰', '韵达'],
+            cartBtnCon:'Add To Cart',
+            postArr: [
+                {
+                    name:'中通',
+                    isChoose:false
+                },{
+                    name:'圆通',
+                    isChoose:false
+                },{
+                    name:'韵达',
+                    isChoose:false
+                },
+            ],
             pic: require('../../images/like.png'),
-
+            good:{
+                id:1,
+                idInGood:1,
+                name:'',
+                image:require('../../images/a1.png'),
+                post:'',
+                goodMount:0,
+                price:4,
+                tag:'待付款'
+            },
         }
     }
 
     componentWillMount() {
-        console.log(this.props.navigation.state.params.obj)
-        this.setState({
-            Msg: this.props.navigation.state.params.obj,
+        let obj=this.props.navigation.state.params.obj;
+        let src=null;
 
-        })
+        if(obj.isLike){
+            src=require('../../images/likeSelect.png')
+        }else{
+            src=require('../../images/like.png')
+        }
+        this.setState({
+            Msg: obj,
+            pic:src
+        });
     }
 
     conPrice(mount) {
         //拿到mount
-        console.log(mount)
-    }
-
-    likeChange() {
+        let good =Object.assign({},this.state.good,{goodMount:mount});
         this.setState({
-            pic: require('../../images/likeSelect.png')
+            good,
         })
     }
 
+    likeChange() {
+        let {id,isLike}=this.state.Msg;
+        if(isLike){
+            this.props.rootStore.goodList.doNotCollect(id)
+            this.setState({
+                pic:require('../../images/like.png')
+            })
+        }else{
+            this.props.rootStore.goodList.doCollect(id)
+            this.setState({
+                pic:require('../../images/likeSelect.png')
+            })
+        }
+    }
+    choosePost(index){
+        let posts = [].concat(this.state.postArr);
+        let p=null;
+        posts.map((item,i)=>{
+            if(i===index){
+                item.isChoose=true;
+                    p = item.name;
+            }else{
+                item.isChoose=false
+            }
+        });
+        let g = Object.assign({},this.state.good,{post:p});
+        this.setState({
+            postArr:posts,
+            good:g
+        });
+    }
+
+
+    addToCart(){
+        let {id,name,image,price,inCart} = this.props.navigation.state.params.obj;
+        //数据的inCart改为true
+        if(this.state.good.post===''||this.state.good.goodMount===0){
+            Alert.alert('数量不能为空且快递方式为必选');
+            return 0;
+        }
+        if(this.props.rootStore.goodList.getItem(id).inCart){
+            Alert.alert('不可以重复添加到购物车')
+        }else{
+            let i = this.props.rootStore.cartGoods.data.length;
+            let g=Object.assign({},this.state.good,{name,image,id:i,idInGood:id,price});
+            this.props.rootStore.goodList.doIncCart(id);
+
+            this.setState({
+                good:g
+            })
+            this.props.rootStore.cartGoods.addItem(g);
+            Alert.alert('已添加至购物车')
+        }
+
+    }
     render() {
         let postArr = this.state.postArr;
         return <View>
@@ -81,8 +168,9 @@ export default class GoodPageView extends Component {
                             <View style={styles.btnGroup}>
                                 {
                                     postArr.map((item, index) => {
-                                        return <TouchableOpacity>
-                                            <Text key={index} style={styles.btn}>{item}</Text>
+                                        return <TouchableOpacity  key={index} style={styles.btn} >
+                                            <Text  style={item.isChoose?styles.active:styles.default}
+                                                   onPress={this.choosePost.bind(this,index)}>{item.name}</Text>
                                         </TouchableOpacity>
                                     })
                                 }
@@ -102,7 +190,9 @@ export default class GoodPageView extends Component {
                 <TouchableOpacity style={styles.addToCart}>
                     <Text style={{
                         lineHeight: 27, fontSize: 18, textAlign: 'center', color: 'white'
-                    }}>Add To Cart</Text>
+                    }}
+                    onPress={this.addToCart.bind(this)}
+                    >{this.state.cartBtnCon}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.Buy}>
                     <Text style={{
@@ -249,12 +339,18 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderWidth: 1,
-        borderColor: '#e5779c',
-        lineHeight: 30,
-        textAlign: 'center',
         borderRadius: 30,
+        marginRight: 10,
+        borderColor: '#e5779c',
+        paddingTop:10
+    },
+    default:{
         color: '#e5779c',
-        marginRight: 10
+        textAlign: 'center',
+    },
+    active:{
+        color:'#297bb8',
+        textAlign: 'center',
     },
     addToCart: {
         position: 'absolute',

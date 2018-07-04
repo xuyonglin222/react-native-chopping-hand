@@ -20,7 +20,7 @@ export default class GoodItem extends Component{
             <View style={styles.Item}>
                 <Image source={obj.image} style={styles.img} />
                 <Text style={styles.name}  >{obj.name}</Text>
-                <Text style={styles.price}>RMB{obj.price}</Text>
+                <Text style={styles.price}>{obj.price}RMB</Text>
             </View>
             </TouchableOpacity>
     }

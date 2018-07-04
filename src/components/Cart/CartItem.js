@@ -6,34 +6,50 @@ import {
     Image,
     StyleSheet
 } from 'react-native'
-
+import {observer,inject} from 'mobx-react'
 import {width} from '../../api/screen'
+import {action,computed} from 'mobx'
 
+@observer
+@inject('rootStore')
 export default class CartItem extends Component {
     constructor(props) {
         super(props);
         this.state={
-            number:1
+            cartId:this.props.id,
+            updateFlag:'update'
         }
+    }
+    @action
+    del(){
+        this.props.rootStore.cartGoods.reduceMount(this.state.cartId);
+        this.setState({
+            updateFlag:'up'
+        });
+        this.props.updateTotal();
+
+    }
+    @action
+    add(){
+        this.props.rootStore.cartGoods.addMount(this.state.cartId);
+        console.log(this.props.rootStore.cartGoods.getData()[this.state.cartId].goodMount);
+        this.props.updateTotal();
+        this.setState({
+            updateFlag:'up'
+        });
+    }
+    @computed get mount(){
+        return this.props.rootStore.cartGoods.getData()[this.state.cartId].goodMount;
     }
 
-    del(){
-        let n=this.state.number;
-        if(n>1){
-            this.setState({
-                number:n-1
-            })
-        }
-    }
-    add(){
-        let n=this.state.number;
-            this.setState({
-                number:n+1
-            })
+    removeItem(){
+        let item = this.props.data;
+        this.props.rootStore.goodList.doNotInCart(item.idInGood);
+        this.props.rootStore.cartGoods.delItem(item);
+        this.props.updateTotal();
     }
     render() {
         let {image, price, name} = this.props.data;
-        let {navigate} = this.props.navigation;
         return <View style={styles.item}>
             <View style={styles.imgWrapper}>
                 <Image style={styles.img} source={image}/>
@@ -41,12 +57,12 @@ export default class CartItem extends Component {
             <View style={styles.txt}>
                 <Text style={styles.name}>{name}</Text>
                 <TouchableOpacity style={styles.delete}>
-                    <Text style={{color:'#e5779c',  fontSize:16,}}>移除</Text>
+                    <Text style={{color:'#e5779c',  fontSize:16,}} onPress={this.removeItem.bind(this)}>移除</Text>
                 </TouchableOpacity>
                 <Text style={styles.price}>{price}RMB</Text>
                 <View style={styles.mount}>
                     <Text style={styles.op} onPress={this.del.bind(this)} >-</Text>
-                    <Text style={styles.num}>{this.state.number}</Text>
+                    <Text style={styles.num}>{this.mount}</Text>
                     <Text style={styles.op}  onPress={this.add.bind(this)}>+</Text>
                 </View>
             </View>
@@ -62,7 +78,7 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingLeft: 20,
         paddingBottom: 20,
-        backgroundColor: '#f4f4f4',
+        backgroundColor: '#fff',
         marginTop: 25,
         flexDirection: 'row'
     },

@@ -1,20 +1,12 @@
 import React, {Component} from 'react'
 import {View, Text, StatusBar, Image,ScrollView, Button, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
 import {width, height} from '../../api/screen'
-import {fruitlist} from "../../api/goodList";
 import CartItem from './CartItem'
-const isComplete = false;
+import {observer,inject} from 'mobx-react'
 
+@observer
+@inject('rootStore')
 class CartView extends Component {
-    constructor() {
-        super();
-        this.state = {
-            isComplete: false,
-            cartList: fruitlist,
-            total:[]
-        }
-    }
-
     static navigationOptions = {
         title: '购物车',
         headerTitleStyle: {flex: 1, textAlign: 'center', fontSize: 15, color: 'black',},
@@ -22,50 +14,85 @@ class CartView extends Component {
         headerLeft: <Image style={{width: 0, height: 0, marginRight: 15}} source={require('../../images/search.png')}/>,
         headerBackStyle: null,
         headerRight: <Text style={{marginRight: 10}}
-                           onPress={() => isComplete = !isComplete}>{isComplete ? '完成' : '编辑'}</Text>
+        >编辑</Text>
     };
-
-    getTotal(msg){
-        let t= this.state.total;
-        t+=msg.price*msg.mount;
+    constructor(props) {
+        super(props);
+        this.state = {
+            isComplete: false,
+            cartList: this.props.rootStore.cartGoods.getData(),
+            total:this.props.rootStore.cartGoods.getTotal()
+        }
+    }
+    componentWillReceiveProps(){
+        console.log('componentWillReceiveProps')
         this.setState({
-        total:t
+            cartList: this.props.rootStore.cartGoods.getData(),
+            total:this.props.rootStore.cartGoods.getTotal()
+        })
+    }
+    componentWillMount(){
+        console.log('componentWillmount')
+    }
+    componentWillUpdate(){
+        console.log('componentWillUpdate')
+    }
+    componentDidMount() {
+        console.log('componentDidMount')
+    }
+
+    componentWillUnmount() {
+        console.log('componentWillUnmount')
+    }
+    updateData(){
+        this.setState({
+            total:this.props.rootStore.cartGoods.getTotal()
         })
     }
 
     render() {
         return (
-            <View>
+            <View style={styles.wrapper}>
                 <StatusBar translucent={true} barStyle={'dark-content'} backgroundColor={'white'}/>
                 <ScrollView style={styles.cartWrapper}>
                     {
-                        fruitlist.map((item,index)=>{
-                            return <CartItem data={item} getPriceItem={this.getTotal.bind(this)} key={index} navigation={this.props.navigation} />
+                        this.state.cartList.map((item,index)=>{
+                            return <CartItem data={item}  id={item.id} updateTotal={this.updateData.bind(this)}
+                                           key={index} navigation={this.props.navigation} />
                         })
                     }
                 </ScrollView>
                 <View style={styles.buy}>
                     <View style={styles.price}>
                         <Text style={styles.label}>Total</Text>
-                        <Text style={styles.money}>300RMB</Text>
+                        <Text style={styles.money}>{this.state.total}RMB</Text>
                     </View>
                     <TouchableOpacity style={styles.btnWrapper}>
                         <Text style={styles.btnBuy}>Buy Now</Text>
                     </TouchableOpacity>
                 </View>
+
             </View>
         )
     }
 }
 const styles=StyleSheet.create({
+    wrapper:{
+        width:width,
+        height:height,
+        position:'relative',
+    },
     cartWrapper:{
         width:width,
-        backgroundColor:'#e5e8fb'
+        height:height-240,
+        position:'absolute',
+        top:0,
+    overflow:'scroll'
     },
     buy:{
         width:width,
         position:'absolute',
-        bottom:0,
+        bottom:120,
         height:120,
         backgroundColor:'#fff'
     },

@@ -1,12 +1,16 @@
 import React, {Component} from 'react'
-import {View, Text, StatusBar, Image, Button, StyleSheet,
-    ScrollView, TouchableOpacity} from 'react-native'
+import {
+    View, StatusBar, StyleSheet,
+    ScrollView,Image
+} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {width, height} from '../../api/screen'
-import {fruitlist} from "../../api/goodList";
 import GoodItem from './goodItem'
 import ScrollableTabView, {DefaultTabBar} from 'react-native-scrollable-tab-view'
+import {observer,inject} from 'mobx-react';
 
+@observer
+@inject('rootStore')
 class HomeView extends Component {
     static navigationOptions = {
         title: '首页',
@@ -53,39 +57,50 @@ class HomeView extends Component {
 
     render() {
         let {navigate} = this.props.navigation;
+        let store = this.props.rootStore.goodList.data;
         return (
             <ScrollView style={styles.container}>
                 <StatusBar translucent={true} barStyle={'dark-content'} backgroundColor={'white'}/>
                 <View style={{width: width, height: 150,}}>
                     {this.state.swipeShow && this.renderSwiper()}
                 </View>
-                    <ScrollableTabView
-                        style={styles.tabContainer}
-                        tabBarBackgroundColor={'white'}
-                        tabBarActiveTextColor={'#e5779c'}
-                        tabBarUnderlineStyle={{backgroundColor: '#e5779c'}}
-                        renderTabBar={() => <DefaultTabBar/>}>
-                        <View style={styles.goodBox} tabLabel={'fruit'}>
-                            {fruitlist.map((fruit, index) => {
-                                    return <GoodItem key={index} obj={fruit} navigation={this.props.navigation}
+                <ScrollableTabView
+                    style={{width: width, height: 600, backgroundColor: 'white'}}
+                    tabBarBackgroundColor={'white'}
+                    tabBarActiveTextColor={'#e5779c'}
+                    tabBarUnderlineStyle={{backgroundColor: '#e5779c'}}
+                    renderTabBar={() => <DefaultTabBar/>}>
+                    <View style={styles.goodBox} tabLabel={'fruit'}>
+                        {store.map((item, index) => {
+                            if(item.kind==='fruit'){
+                                return <GoodItem key={index} obj={item} navigation={this.props.navigation}
+                                />
+                            }
+
+                            }
+                        )}
+                    </View>
+                    <View style={styles.goodBox} tabLabel={'clothes'}>
+                        {store.map((item, index) => {
+                                if(item.kind==='clothes'){
+                                    return <GoodItem key={index} obj={item} navigation={this.props.navigation}
                                     />
                                 }
-                            )}
-                        </View>
-                        <View style={styles.goodBox} tabLabel={'clothes'}>
-                            {fruitlist.map((fruit, index) => {
-                                    return <GoodItem key={index}
-                                                     obj={fruit} navigation={this.props.navigation}/>
+
+                            }
+                        )}
+                    </View>
+                    <View style={styles.goodBox} tabLabel={'phone'}>
+                        {store.map((item, index) => {
+                                if(item.kind==='mobile'){
+                                    return <GoodItem key={index} obj={item} navigation={this.props.navigation}
+                                    />
                                 }
-                            )}
-                        </View>
-                        <View style={styles.goodBox} tabLabel={'phone'}>
-                            {fruitlist.map((fruit, index) => {
-                                    return <GoodItem key={index} obj={fruit} navigation={this.props.navigation}/>
-                                }
-                            )}
-                        </View>
-                    </ScrollableTabView>
+
+                            }
+                        )}
+                    </View>
+                </ScrollableTabView>
             </ScrollView>
         )
     }
@@ -94,6 +109,7 @@ class HomeView extends Component {
 const styles = StyleSheet.create({
     container: {
         width: width,
+        height: 1000,
         flex: 1,
         backgroundColor: 'white'
     },
@@ -112,11 +128,6 @@ const styles = StyleSheet.create({
     txt: {
         width: 120,
         height: 45,
-    },
-    tabContainer:{
-        width: width,
-        height: 600,
-        backgroundColor:'white'
     },
     goodBox: {
         width: width,

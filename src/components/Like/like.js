@@ -1,8 +1,11 @@
 import React ,{Component} from 'react'
 import {View,Text,ScrollView,StatusBar,Image,Button,StyleSheet,TextInput,TouchableOpacity} from 'react-native'
 import {width,height} from '../../api/screen'
-import {fruitlist} from "../../api/goodList";
 import LikeItem from './LikeItem'
+import {observer,inject} from 'mobx-react'
+
+@observer
+@inject('rootStore')
 class LikeView extends Component{
     static navigationOptions = {
         title: '收藏',
@@ -13,11 +16,14 @@ class LikeView extends Component{
     constructor(props){
         super(props);
         this.state={
-            likeArr:fruitlist
+            likeArr:null
         }
     }
     componentWillMount(){
-
+        let arr=this.props.rootStore.goodList.getData().filter((item)=>item.isLike)
+        this.setState({
+            likeArr:arr
+        })
     }
     render(){
         let likes=this.state.likeArr;

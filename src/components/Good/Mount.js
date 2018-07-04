@@ -13,20 +13,21 @@ export default class Mount extends Component {
         }
     }
 
-    componentDidUpdate() {
-        this.props.getMount(this.state.mount)
-    }
 
     delMount() {
         let m = this.state.mount;
         if (m > 0) {
-            this.setState({mount: m - 1})
+            this.setState({mount: m - 1},()=>{
+                this.props.getMount(this.state.mount)
+            })
         }
     }
 
     addMount() {
         let m = this.state.mount;
-        this.setState({mount: m + 1})
+        this.setState({mount: m + 1},()=>{
+            this.props.getMount(this.state.mount)
+        })
 
     }
 
