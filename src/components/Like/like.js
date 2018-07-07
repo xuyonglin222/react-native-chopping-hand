@@ -11,7 +11,7 @@ class LikeView extends Component{
         title: '收藏',
         headerTitleStyle: {flex: 1, textAlign: 'center', fontSize: 15, color: 'black'},
         headerStyle: {height: 38, backgroundColor: 'white', marginTop: 21},
-        headerRight: <Image style={{width: 40, height: 40}}/>
+        headerRight: <Image style={{width: 40, height: 40}}/>,
     };
     constructor(props){
         super(props);
@@ -45,7 +45,7 @@ class LikeView extends Component{
 const styles=StyleSheet.create({
     likeWrapper:{
         width:width
-    }
+    },
 })
 
 export default LikeView;

@@ -22,8 +22,8 @@ import LikeView from './components/Like/like';
 import TabBarItem from './components/TabBarItem'
 
 import {Provider} from  'mobx-react'
-import  {goodList,cartGoods} from './store'
-let store = {goodList,cartGoods};
+import  {goodList,cartGoods,user} from './store'
+let store = {goodList,cartGoods,user};
 const Tab = TabNavigator({
         Home: {
             screen: HomeView,
@@ -88,15 +88,16 @@ const Tab = TabNavigator({
 
 const Stack =StackNavigator(
     {
-        Tab: {
-            screen: Tab,
-        },
         Login: {
             screen: LoginView,
             navigationOptions: {
                 header: null
             }
         },
+        Tab: {
+            screen: Tab,
+        },
+
         Like: {
             screen: LikeView,
         },

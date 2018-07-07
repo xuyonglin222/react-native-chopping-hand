@@ -5,19 +5,23 @@ import {width} from '../../api/screen'
 import Avatar from './Avatar'
 
 import ListItem from './ListItem'
+import {observer,inject} from 'mobx-react'
 
+@observer
+@inject('rootStore')
 class MineView extends Component{
     static navigationOptions = {
        title: '我',
        headerTitleStyle: {flex:1,textAlign:'center',fontSize: 15, color: 'black',},
         headerStyle: {height: 38, backgroundColor: 'white',marginTop:21},
        headerBackStyle:null,
+        headerLeft:null
     };
 
     constructor(props){
         super(props);
         this.state={
-            name:'徐庚庚',
+            name:'',
             List:[
                 {
                     name:'我的订单',
@@ -38,19 +42,30 @@ class MineView extends Component{
                 ]
         }
     }
+    componentWillMount(){
+        console.log(this.props.rootStore.user)
+        this.setState({
+            name:this.props.rootStore.user.getName(),
+            image:this.props.rootStore.user.getAvatar(),
+        })
+    }
+    logOut(){
+        this.props.rootStore.user.setName('');
+        this.props.rootStore.user.setAvatar(null);
+        this.props.navigation.navigate('Login');
+    }
     render(){
-        let pic= {
-            image:require('../../images/avatar.jpg')
-        }
 
-        let name=this.state.name;
+
+        let {name,image}=this.state;
+
         return (
             <View>
                 <StatusBar translucent={true} barStyle={'dark-content'} backgroundColor={'white'}/>
                 <View style={styles.wrapper}>
                     <Image source={require('../../images/mybg.jpg')} style={styles.img} />
                     <View style={styles.blk}>
-                        <Avatar source={pic.image} />
+                        <Avatar source={image} />
                         <Text style={styles.name}>{name}</Text>
                     </View>
                     <View style={styles.list}>
@@ -60,7 +75,7 @@ class MineView extends Component{
                             })
                         }
                     </View>
-                    <TouchableOpacity style={styles.btnWrapper}>
+                    <TouchableOpacity style={styles.btnWrapper} onPress={this.logOut.bind(this)}>
                         <Text style={styles.btnOut}>Login Out</Text>
                     </TouchableOpacity>
                 </View>

@@ -7,55 +7,103 @@ import {
     Image,
     TouchableOpacity,
     TextInput,
-    Button
+    Button,
+    Alert
 } from 'react-native'
 import {width,height} from '../../api/screen'
-
+import axios from 'axios'
 class RegisterView extends Component{
     constructor(){
         super();
         this.state={
-            name:''
+            name:'',
+            psd:'',
         }
     }
+
+    doRegister(){
+        let  {navigate} =this.props.navigation
+        let name= this.state.name;
+        let psd= this.state.psd;
+        axios({
+            method:'post',
+            url:'/register',
+            data:{
+                name,
+                psd,
+            }
+        }).then((res)=>{
+            if(res.data.status===200){
+                Alert.alert('提示','注册成功', [
+                    {text: 'OK', onPress: () => navigate('Login',{name:this.state.name})},
+                ])
+            }else{
+                Alert.alert('注册失败，请更换用户名');
+                this.setState({
+                    name:'',
+                    psd:''
+                })
+            }
+            },
+            (err)=>{
+            console.log(err)
+            })
+
+    }
     render(){
-        let  {navigate} =this.props.navigation;
+
         return (
             <View style={styles.container}>
                 <StatusBar translucent={true} backgroundColor={'transparent'} barStyle='dark-content'/>
                 <View style={styles.backIcon}>
-                    <TouchableOpacity  onPress={()=>navigate('Login')}>
+                    <TouchableOpacity  onPress={()=>this.props.navigation.navigate('Login')}>
                         <Image style={styles.img} source={require('../../images/back.png')}
                         />
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.title}>新用户注册</Text>
-                <View style={styles.content}>
-                    <View style={styles.form}>
+                <View style={styles.content}
+                            ref={'scrollView'}
+                >
+                    <View style={styles.form}
+                    >
                         <View style={styles.line}>
-                            <Text style={styles.label}>邮箱</Text>
+                            <Text style={styles.label}>用户名</Text>
                             <View style={styles.telCon}>
-                                {/*<Text style={styles.tel}>+86</Text>*/}
-                                <TextInput  style={styles.textInput} underlineColorAndroid='transparent'
+                                <TextInput  style={styles.textInput}
+                                            underlineColorAndroid='transparent'
                                             selectionColor={'black'}
-                                            placeholder={'请输入邮箱'}
+                                            placeholder={'请输入用户名'}
                                             placeholderTextColor={'gray'}
                                             autoFocus
-
+                                            value={this.state.name}
+                                            onChangeText={(value)=>this.setState({name:value})}
                                 />
                             </View>
                         </View>
-
+                        <View style={styles.line}>
+                            <Text style={styles.label}>密码</Text>
+                            <View style={styles.telCon}>
+                                <TextInput  style={styles.textInput}
+                                            underlineColorAndroid='transparent'
+                                            selectionColor={'black'}
+                                            placeholder={'请输入密码'}
+                                            placeholderTextColor={'gray'}
+                                            secureTextEntry={true}
+                                            value={this.state.psd}
+                                            onChangeText={(value)=>this.setState({psd:value})}
+                                />
+                            </View>
+                        </View>
                         <View style={styles.line}>
                             <TouchableOpacity style={styles.btnCan}
-                                              >
+                            >
                                 <Button
-                                    title='下一步'
-                                    onPress={()=>navigate('Verify')}
+                                    title='注册'
+                                    onPress={this.doRegister.bind(this)}
                                 />
                             </TouchableOpacity>
                         </View>
-
                     </View>
                 </View>
 
@@ -81,15 +129,16 @@ const styles=StyleSheet.create({
         height:30
     },
     title:{
-        marginTop:40,
+        marginTop:20,
         fontSize:18,
         color:'black'
     },
     content:{
-        marginTop:40,
+        marginTop:20,
     },
     form:{
-        height:200,
+        height:800,
+        overflow:'scroll',
     },
     line:{
         width:width,
@@ -114,10 +163,8 @@ const styles=StyleSheet.create({
         borderRightColor:'gray'
     },
     textInput:{
-        // marginLeft:40,
         color:'black',
-        width:320,
-        // marginTop:-34,
+        width:280,
 
     },
     btnCan:{

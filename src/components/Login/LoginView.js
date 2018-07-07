@@ -11,6 +11,7 @@ import LoginForm from './LoginForm'
 class LoginView extends Component {
     constructor() {
         super();
+
     }
     render() {
         return (

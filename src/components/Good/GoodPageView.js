@@ -24,7 +24,8 @@ export default class GoodPageView extends Component {
         title: '商品详情',
         headerTitleStyle: {flex: 1, textAlign: 'center', fontSize: 15, color: 'black'},
         headerStyle: {height: 38, backgroundColor: 'white', marginTop: 21},
-        headerRight: <Image style={{width: 40, height: 40}}/>
+        headerRight: <Image style={{width: 40, height: 40}}/>,
+
     };
 
     constructor(props) {

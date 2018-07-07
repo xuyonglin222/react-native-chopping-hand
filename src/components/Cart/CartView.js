@@ -13,8 +13,7 @@ class CartView extends Component {
         headerStyle: {height: 38, backgroundColor: 'white', marginTop: 21},
         headerLeft: <Image style={{width: 0, height: 0, marginRight: 15}} source={require('../../images/search.png')}/>,
         headerBackStyle: null,
-        headerRight: <Text style={{marginRight: 10}}
-        >编辑</Text>
+        headerRight: <Text style={{marginRight: 10}} >编辑</Text>
     };
     constructor(props) {
         super(props);
@@ -23,6 +22,11 @@ class CartView extends Component {
             cartList: this.props.rootStore.cartGoods.getData(),
             total:this.props.rootStore.cartGoods.getTotal()
         }
+    }
+    updateState(){
+        this.setState({
+            isComplete:true
+        })
     }
     componentWillReceiveProps(){
         console.log('componentWillReceiveProps')
@@ -67,6 +71,10 @@ class CartView extends Component {
                         <Text style={styles.label}>Total</Text>
                         <Text style={styles.money}>{this.state.total}RMB</Text>
                     </View>
+                    <Text style={{position:'absolute',left:100,
+                        width:200,height:50,}}
+                        onPress={this.updateState.bind(this)}
+                    />
                     <TouchableOpacity style={styles.btnWrapper}>
                         <Text style={styles.btnBuy}>Buy Now</Text>
                     </TouchableOpacity>

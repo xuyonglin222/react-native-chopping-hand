@@ -1,6 +1,5 @@
 import {observable, action,computed} from 'mobx';
 import Goods from "../api/goodList";
-
 class Cart {
     @observable data=[];
     @observable total=0;
@@ -91,5 +90,28 @@ class Cart {
      }
 }
 
+class User {
+    @observable name='sss';
+    @observable image=null;
+
+    @action
+    setName(name){
+        this.name=name;
+    }
+    @action
+    getName(){
+        return this.name;
+    }
+    @action
+    setAvatar(img){
+        this.image=img;
+    }
+    @action
+    getAvatar(){
+        return this.image;
+    }
+}
+
 export const cartGoods = new Cart();
 export const goodList = new GoodList();
+export const  user =new User();

@@ -33,7 +33,7 @@ class ForgetPsdView extends Component{
                 <View style={styles.content}>
                     <View style={styles.form}>
                         <View style={styles.line}>
-                            <Text style={styles.label}>邮箱</Text>
+                            <Text style={styles.label}>手机号</Text>
                             <View style={styles.telCon}>
                                 {/*<Text style={styles.tel}>+86</Text>*/}
                                 <TextInput  style={styles.textInput} underlineColorAndroid='transparent'

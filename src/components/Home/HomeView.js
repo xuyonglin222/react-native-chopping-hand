@@ -26,14 +26,16 @@ class HomeView extends Component {
         super(props);
         this.state = {
             swipeShow: false,
+            store:[]
         };
         this.txt = null
     }
 
-    componentDidMount() {
+    componentWillMount() {
         setTimeout(() => {
             this.setState({
-                swipeShow: true
+                swipeShow: true,
+                store :this.props.rootStore.goodList.getData()
             })
         })
     }
@@ -54,53 +56,57 @@ class HomeView extends Component {
         )
     }
 
+   renderTab(){
+       let store = this.state.store;
+       return (
+            <ScrollableTabView
+                style={{width: width, height: 600, backgroundColor: 'white'}}
+                tabBarBackgroundColor={'white'}
+                tabBarActiveTextColor={'#e5779c'}
+                tabBarUnderlineStyle={{backgroundColor: '#e5779c'}}
+                renderTabBar={() => <DefaultTabBar/>}>
+                <View style={styles.goodBox} tabLabel={'fruit'}>
+                    {store.map((item, index) => {
+                            if(item.kind==='fruit'){
+                                return <GoodItem key={index} obj={item} navigation={this.props.navigation}
+                                />
+                            }
 
+                        }
+                    )}
+                </View>
+                <View style={styles.goodBox} tabLabel={'clothes'}>
+                    {store.map((item, index) => {
+                            if(item.kind==='clothes'){
+                                return <GoodItem key={index} obj={item} navigation={this.props.navigation}
+                                />
+                            }
+
+                        }
+                    )}
+                </View>
+                <View style={styles.goodBox} tabLabel={'phone'}>
+                    {store.map((item, index) => {
+                            if(item.kind==='mobile'){
+                                return <GoodItem rootStore={this.props.rootStore} key={index} obj={item} navigation={this.props.navigation}
+                                />
+                            }
+
+                        }
+                    )}
+                </View>
+            </ScrollableTabView>
+        )
+   }
     render() {
         let {navigate} = this.props.navigation;
-        let store = this.props.rootStore.goodList.data;
         return (
             <ScrollView style={styles.container}>
                 <StatusBar translucent={true} barStyle={'dark-content'} backgroundColor={'white'}/>
                 <View style={{width: width, height: 150,}}>
                     {this.state.swipeShow && this.renderSwiper()}
                 </View>
-                <ScrollableTabView
-                    style={{width: width, height: 600, backgroundColor: 'white'}}
-                    tabBarBackgroundColor={'white'}
-                    tabBarActiveTextColor={'#e5779c'}
-                    tabBarUnderlineStyle={{backgroundColor: '#e5779c'}}
-                    renderTabBar={() => <DefaultTabBar/>}>
-                    <View style={styles.goodBox} tabLabel={'fruit'}>
-                        {store.map((item, index) => {
-                            if(item.kind==='fruit'){
-                                return <GoodItem key={index} obj={item} navigation={this.props.navigation}
-                                />
-                            }
-
-                            }
-                        )}
-                    </View>
-                    <View style={styles.goodBox} tabLabel={'clothes'}>
-                        {store.map((item, index) => {
-                                if(item.kind==='clothes'){
-                                    return <GoodItem key={index} obj={item} navigation={this.props.navigation}
-                                    />
-                                }
-
-                            }
-                        )}
-                    </View>
-                    <View style={styles.goodBox} tabLabel={'phone'}>
-                        {store.map((item, index) => {
-                                if(item.kind==='mobile'){
-                                    return <GoodItem key={index} obj={item} navigation={this.props.navigation}
-                                    />
-                                }
-
-                            }
-                        )}
-                    </View>
-                </ScrollableTabView>
+                {this.state.swipeShow&&this.renderTab()}
             </ScrollView>
         )
     }

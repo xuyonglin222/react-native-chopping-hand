@@ -1,9 +1,12 @@
 import React , { Component } from 'react'
 
-import {View,StyleSheet,TextInput,Button,TouchableOpacity,Image,Text} from 'react-native'
+import {View,StyleSheet,TextInput,Alert,Button,TouchableOpacity,Image,Text} from 'react-native'
 import {width,height} from '../../api/screen'
+import axios from 'axios'
+import {observer,inject} from 'mobx-react'
 
-
+@observer
+@inject('rootStore')
 class LoginForm extends  Component{
     constructor(){
         super();
@@ -18,11 +21,43 @@ class LoginForm extends  Component{
             this.setState({isBtnActive:false});
         }
     }
+    componentWillMount(){
+        if(this.props.navigation.params){
+            let name = this.props.navigation.params.name;
+            this.setState({
+                name,
+            })
+        }
+    }
     btnBlur(){
         this.setState({isBtnActive:true});
     }
     doLogin(){
-        console.log('login')
+        let name=this.state.name;
+        let psd=this.state.psd;
+        axios({
+            method:'post',
+            url:'/login',
+            data:{
+                name,
+                psd
+            }
+        }).then((res)=>{
+            console.log(res.data);
+            let {status,username}=res.data;
+            console.log(status);
+            if(status==='200'){
+                this.props.rootStore.user.setName(username);
+                this.props.rootStore.user.setAvatar(require('../../images/avatar.jpg'));
+                console.log(this.props.rootStore.user.getName())
+                this.props.navigation.navigate('Home');
+            }else{
+                Alert.alert('登录失败，请重新登录');
+            }
+
+        },(err)=>{
+            console.log(err)
+        })
     }
 
     render(){
@@ -70,7 +105,7 @@ class LoginForm extends  Component{
                                 ref={'btnLogin'}
                                 title='登录'
                                 // disabled={this.state.isBtnActive}
-                                onPress ={()=>navigate('Home')}
+                                onPress ={this.doLogin.bind(this)}
                             />
                         </TouchableOpacity>
                     </View>

@@ -14,6 +14,7 @@ export default class GoodItem extends Component{
 
     }
 
+
     render(){
         const {navigation,obj} =this.props;
         return <TouchableOpacity onPress={()=>navigation.navigate('GoodPage',{obj})}>
