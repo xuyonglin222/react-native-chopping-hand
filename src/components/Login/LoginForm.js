@@ -78,7 +78,6 @@ class LoginForm extends  Component{
                                    selectionColor={'white'}
                                    placeholder={'请输入用户名'}
                                    placeholderTextColor={'gray'}
-                                   autoFocus
                                     value={this.state.name}
                                     onChangeText={(msg)=>{
                                         this.setState({name:msg});

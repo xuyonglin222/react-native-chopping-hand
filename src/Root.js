@@ -22,8 +22,8 @@ import LikeView from './components/Like/like';
 import TabBarItem from './components/TabBarItem'
 
 import {Provider} from  'mobx-react'
-import  {goodList,cartGoods,user} from './store'
-let store = {goodList,cartGoods,user};
+import  {goodList,cartGoods,user,order} from './store'
+let store = {goodList,cartGoods,user,order};
 const Tab = TabNavigator({
         Home: {
             screen: HomeView,

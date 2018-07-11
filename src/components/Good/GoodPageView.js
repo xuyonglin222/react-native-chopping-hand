@@ -54,7 +54,7 @@ export default class GoodPageView extends Component {
                 post:'',
                 goodMount:0,
                 price:4,
-                tag:'待付款'
+                tag:'待收货'
             },
         }
     }
@@ -108,6 +108,7 @@ export default class GoodPageView extends Component {
             }
         });
         let g = Object.assign({},this.state.good,{post:p});
+        console.log(g);
         this.setState({
             postArr:posts,
             good:g
@@ -116,7 +117,7 @@ export default class GoodPageView extends Component {
 
 
     addToCart(){
-        let {id,name,image,price,inCart} = this.props.navigation.state.params.obj;
+        let {id,name,image,price} = this.props.navigation.state.params.obj;
         //数据的inCart改为true
         if(this.state.good.post===''||this.state.good.goodMount===0){
             Alert.alert('数量不能为空且快递方式为必选');
@@ -125,15 +126,39 @@ export default class GoodPageView extends Component {
         if(this.props.rootStore.goodList.getItem(id).inCart){
             Alert.alert('不可以重复添加到购物车')
         }else{
-            let i = this.props.rootStore.cartGoods.data.length;
-            let g=Object.assign({},this.state.good,{name,image,id:i,idInGood:id,price});
+            let len = this.props.rootStore.cartGoods.getData().length;
+            let goodMount=this.state.good.goodMount;
+            let total=price*goodMount;
+            let arr=['待收货','已完成'];
+            let i=Math.floor((Math.random()*10)%2);
+            let g=Object.assign({},this.state.good,{name,image,id:len,idInGood:id,price,total,tag:arr[i]});
             this.props.rootStore.goodList.doIncCart(id);
-
             this.setState({
                 good:g
-            })
+            });
             this.props.rootStore.cartGoods.addItem(g);
             Alert.alert('已添加至购物车')
+        }
+
+    }
+    doBuy(){
+        let {id,name,image,price} = this.props.navigation.state.params.obj;
+        let goodMount=this.state.good.goodMount;
+        let total=price*goodMount;
+        let post = this.state.good.post;
+        console.log(post)
+        if(post===''||total===0){
+            Alert.alert('数量不能为空且快递方式为必选');
+            return 0;
+        }else{
+            let arr=['待收货','已完成'];
+            let i=Math.floor((Math.random()*10)%2);
+            let len=this.props.rootStore.order.data.length;
+            let good={id:len,name,goodMount,image,post,idInGood:id,total,tag:arr[i]};
+            this.props.rootStore.order.addOrder(good);
+            Alert.alert('提示','购买成功', [
+                {text: 'OK', onPress: () =>this.props.navigation.navigate('Home')},
+            ])
         }
 
     }
@@ -198,7 +223,9 @@ export default class GoodPageView extends Component {
                 <TouchableOpacity style={styles.Buy}>
                     <Text style={{
                         lineHeight: 27, fontSize: 18, textAlign: 'center', color: 'white'
-                    }}>Buy Now</Text>
+                    }}
+                    onPress={this.doBuy.bind(this)}
+                    >Buy Now</Text>
                 </TouchableOpacity>
             </View>
         </View>

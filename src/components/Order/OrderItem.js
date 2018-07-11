@@ -5,22 +5,38 @@ import {
     Text,
     StyleSheet,
     Image,
+    TouchableOpacity
 } from 'react-native'
 
 import {width} from '../../api/screen'
+import {observer,inject}  from 'mobx-react'
+import {action} from 'mobx'
 
+@observer
+@inject('rootStore')
 export default  class OrderItem extends Component{
     constructor(props){
         super(props);
     }
-
+    @action
+    removeItem(){
+        this.props.rootStore.order.deleteOrder(this.props.data);
+        this.props.updateH();
+    }
     render(){
         let {post,name,total,tag,goodMount,image} = this.props.data;
         return <View style={styles.item}>
             <View style={styles.header}>
                 <Text style={styles.post}>{post}快递</Text>
                 <Text style={styles.tag}>{tag}</Text>
-                <Image style={styles.icon} source={require('../../images/remove.png')}/>
+                <TouchableOpacity
+                    style={styles.iconCon}
+                    onPress={this.removeItem.bind(this)}
+                >
+                    <Image style={styles.icon}
+                           source={require('../../images/remove.png')}/>
+                </TouchableOpacity>
+
             </View>
             <View style={styles.content}>
                 <View style={styles.imgWrapper}>
@@ -61,6 +77,10 @@ const styles = StyleSheet.create({
     },
     tag:{
         width:60,
+    },
+    iconCon:{
+        width:16,
+        height:16
     },
     icon:{
         width:16,

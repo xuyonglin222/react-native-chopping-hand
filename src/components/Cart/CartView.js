@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, StatusBar, Image,ScrollView, Button, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
+import {View, Text, StatusBar, Image,ScrollView, Alert, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
 import {width, height} from '../../api/screen'
 import CartItem from './CartItem'
 import {observer,inject} from 'mobx-react'
@@ -27,33 +27,35 @@ class CartView extends Component {
         this.setState({
             isComplete:true
         })
+        this.updateData();
     }
     componentWillReceiveProps(){
-        console.log('componentWillReceiveProps')
         this.setState({
             cartList: this.props.rootStore.cartGoods.getData(),
             total:this.props.rootStore.cartGoods.getTotal()
         })
     }
-    componentWillMount(){
-        console.log('componentWillmount')
-    }
-    componentWillUpdate(){
-        console.log('componentWillUpdate')
-    }
-    componentDidMount() {
-        console.log('componentDidMount')
-    }
 
-    componentWillUnmount() {
-        console.log('componentWillUnmount')
-    }
     updateData(){
         this.setState({
             total:this.props.rootStore.cartGoods.getTotal()
         })
     }
-
+    _doBuy(){
+        let cart = Array.from(this.props.rootStore.cartGoods.getData());
+        cart.map((item,index)=>{
+            let {idInGood,total,price,goodMount} = item;
+            total=price*goodMount;
+            item.total=total;
+            this.props.rootStore.goodList.doNotInCart(idInGood);
+            this.props.rootStore.order.addOrder(item);
+        })
+        this.props.rootStore.cartGoods.removeAll();
+        this.updateData();
+        Alert.alert('提示','购买成功，请到订单管理查看详情', [
+            {text: 'OK'},
+        ])
+    }
     render() {
         return (
             <View style={styles.wrapper}>
@@ -75,7 +77,7 @@ class CartView extends Component {
                         width:200,height:50,}}
                         onPress={this.updateState.bind(this)}
                     />
-                    <TouchableOpacity style={styles.btnWrapper}>
+                    <TouchableOpacity style={styles.btnWrapper} onPress={this._doBuy.bind(this)}>
                         <Text style={styles.btnBuy}>Buy Now</Text>
                     </TouchableOpacity>
                 </View>

@@ -7,66 +7,58 @@ import {
     ScrollView
 } from 'react-native'
 import ScrollableTabView, {DefaultTabBar}  from 'react-native-scrollable-tab-view';
-import {width} from '../../api/screen';
+import {width,height} from '../../api/screen';
 import OrderItem from './OrderItem'
+import {observer,inject}  from 'mobx-react'
 
-
+@observer
+@inject('rootStore')
 export default class OrderView extends Component {
-    constructor(props) {
-        super(props);
-        this.state={
-            orderList:[
-                {
-                    id:1,
-                    name:'菠萝',
-                    image:require('../../images/a1.png'),
-                    post:'中通',
-                    goodMount:1,
-                    total:888,
-                    tag:'待付款'
-                },
-                {
-                    id:2,
-                    name:'苹果',
-                    image:require('../../images/a1.png'),
-                    post:'中通',
-                    goodMount:1,
-                    total:888,
-                    tag:'已完成'
-                }
-            ]
-        }
-
-    }
-
     static navigationOptions = {
         title: '我的订单',
         headerTitleStyle: {flex: 1, textAlign: 'center', fontSize: 15, color: 'black'},
         headerStyle: {height: 38, backgroundColor: 'white', marginTop: 21},
         headerRight: <Image style={{width: 40, height: 40}}/>
     };
+    constructor(props) {
+        super(props);
+        this.state={
+            orderList:[]
+        }
+    }
+    componentWillMount() {
+        this._update();
+    }
+
+    _update(){
+        let orderList = Array.from(this.props.rootStore.order.data);
+        this.setState({
+            orderList,
+        })
+    }
+
 
     render() {
 
-        return <View style={styles.wrapper}>
+        return <ScrollView style={styles.scrWrapper}>
             <ScrollableTabView
                 tabBarBackgroundColor={'white'}
                 tabBarActiveTextColor={'#e5779c'}
+                style={{width: width, height: 900,}}
                 tabBarUnderlineStyle={{backgroundColor: '#e5779c'}}
                 renderTabBar={() => <DefaultTabBar/>}>
                 <View  tabLabel={'全部'}>
                     {
                         this.state.orderList.map((order,index)=>{
-
-                            return <OrderItem key={index} data={order} />
+                            return <OrderItem updateH={this._update.bind(this)} key={index} data={order} />
                         })
                     }
                 </View>
-                <View  tabLabel={'待付款'}>
+                <View  tabLabel={'待收货'}>
                     {
                         this.state.orderList.map((order,index)=>{
-                            if(order.tag==='待付款'){
-                                return <OrderItem key={index} data={order} />
+                            if(order.tag==='待收货'){
+                                return <OrderItem key={index} data={order} updateH={this._update.bind(this)} />
                             }
                         })
                     }
@@ -75,19 +67,19 @@ export default class OrderView extends Component {
                     {
                         this.state.orderList.map((order,index)=>{
                             if(order.tag==='已完成'){
-                                return <OrderItem key={index} data={order} />
+                                return <OrderItem key={index} data={order} updateH={this._update.bind(this)} />
                             }
                         })
                     }
                 </View>
             </ScrollableTabView>
-        </View>
+        </ScrollView>
     }
 }
 
 const styles =StyleSheet.create({
-    wrapper:{
+    scrWrapper:{
         width:width,
-        height:9000
-    }
+        height:height,
+    },
 })

@@ -36,6 +36,10 @@ class Cart {
     getData(){
         return this.data;
     }
+    @action
+    removeAll(){
+        this.data.length=0;
+;    }
     /**
      * 从购物车中移除
      */
@@ -111,7 +115,30 @@ class User {
         return this.image;
     }
 }
+class Order{
+    @observable data=[];
 
+    @action
+    addOrder(order){
+        this.data.push(order);
+    }
+
+    @action
+    deleteOrder(item){
+        let index=this.data.indexOf(item);
+        if(index>-1){
+            this.data.splice(index,1)
+        }
+
+    }
+
+    @action
+    getOrderList(){
+        return this.data;
+    }
+
+}
 export const cartGoods = new Cart();
 export const goodList = new GoodList();
 export const  user =new User();
+export const order =new Order();
